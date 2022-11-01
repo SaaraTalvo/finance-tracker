@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /transactions/{document=**} {
+      // allow read, write: if true;
+
+      allow create: if request.auth != null;
+
+      //logged in user id must match the documents creator to read and or delete
+      allow read, delete: if request.auth.uid == resource.data.uid
+      }
+  }
+}
